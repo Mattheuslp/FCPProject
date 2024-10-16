@@ -5,12 +5,12 @@ export default StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: 'rgba(0, 0, 0, 0.5)',  // Fundo escurecido
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
   },
   modalContainer: {
     position: 'absolute',
-    bottom: 30,  // Mesmo valor do botão "+" para ficar na mesma posição
-    right: 30,   // Mesmo valor do botão "+" para ficar na mesma posição
+    bottom: 30, 
+    right: 30,
     backgroundColor: '#2c3e50',
     borderRadius: 10,
     padding: 10,
@@ -22,12 +22,12 @@ export default StyleSheet.create({
     borderBottomColor: '#fff',
   },
   optionTextReceita: {
-    color: '#27ae60',  // Cor verde para "Receita"
-    fontSize: 18,
+    color: '#27ae60',
+    fontSize: 10,
     textAlign: 'center',
   },
   optionTextDespesa: {
-    color: '#e74c3c',  // Cor vermelha para "Despesa"
+    color: '#e74c3c',
     fontSize: 18,
     textAlign: 'center',
   },

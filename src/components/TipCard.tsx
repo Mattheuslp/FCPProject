@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, Text } from 'react-native';
-import styles from '../styles/TipCardStyles';  // Importando o estilo
+import styles from '../styles/TipCardStyles';
 
 interface TipCardProps {
   tip: string;
@@ -8,7 +8,9 @@ interface TipCardProps {
 
 const TipCard: React.FC<TipCardProps> = ({ tip }) => (
   <View style={styles.container}>
-    <Text style={styles.tipText}>{tip}</Text>
+    <Text style={styles.tipText}>
+      {tip !== null && tip !== undefined ? tip : 'Dica indisponível no momento.'}
+    </Text>
   </View>
 );
 

@@ -2,33 +2,31 @@ import React, { useState } from 'react';
 import { View, Text, TextInput, Button } from 'react-native';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import { RootStackParamList } from '../navigation/routes'; // Importar a tipagem
-import styles from '../styles/AddTransactionStyles'; // Importar o estilo centralizado
+import { RootStackParamList } from '../navigation/routes'; 
+import styles from '../styles/AddTransactionStyles'; 
 
 type Props = NativeStackScreenProps<RootStackParamList, 'AddTransaction'>;
 
 export default function AddIncomeComponent({ navigation, route }: Props) {
-  const { addTransaction } = route.params; // Recebe a função de callback para adicionar a transação
+  const { addTransaction } = route.params;
   const [description, setDescription] = useState('');
   const [amount, setAmount] = useState('');
   const [date, setDate] = useState(new Date());
   const [showDatePicker, setShowDatePicker] = useState(false);
 
-  const onChangeDate = (event, selectedDate) => {
+  const onChangeDate = (event: any, selectedDate: any) => {
     const currentDate = selectedDate || date;
     setShowDatePicker(false);
     setDate(currentDate);
   };
 
-  // Função para validar o valor numérico com 2 casas decimais
   const handleAmountChange = (text: string) => {
-    const numericValue = text.replace(/[^0-9.,]/g, ''); // Remove tudo que não é número ou separador decimal
-    const parsedValue = numericValue.replace(',', '.'); // Troca vírgula por ponto
-    const formattedValue = parseFloat(parsedValue).toFixed(2); // Limita a 2 casas decimais
+    const numericValue = text.replace(/[^0-9.,]/g, '');
+    const parsedValue = numericValue.replace(',', '.');
+    const formattedValue = parseFloat(parsedValue).toFixed(2);
     setAmount(formattedValue);
   };
 
-  // Função para salvar a receita e enviar os dados para o banco de dados
   const saveIncome = () => {
     if (description.length > 100) {
       alert('A descrição deve ter no máximo 100 caracteres');
@@ -41,17 +39,14 @@ export default function AddIncomeComponent({ navigation, route }: Props) {
     }
 
     const newIncome = {
-      id: Math.random().toString(), // Gerar um ID aleatório para a nova transação
+      id: Math.random().toString(),
       description,
       amount: parseFloat(amount),
-      date: date.toLocaleDateString(), // Formatar a data
-      type: 'receita', // Indica que é uma receita
+      date: date.toLocaleDateString(),
+      type: 'receita',
     };
 
-    // Callback para atualizar a lista de transações na HomeScreen
     addTransaction(newIncome);
-
-    // Volta para a tela anterior
     navigation.goBack();
   };
 
@@ -62,17 +57,17 @@ export default function AddIncomeComponent({ navigation, route }: Props) {
         style={styles.input}
         placeholder="Digite a descrição (máx. 100 caracteres)"
         value={description}
-        maxLength={100} // Limite de 100 caracteres
+        maxLength={100}
         onChangeText={setDescription}
       />
 
       <Text style={styles.label}>Valor</Text>
       <TextInput
         style={styles.input}
-        placeholder="Digite o valor (ex: 123.45)"
+        placeholder="Digite o valor (ex: 123.88)"
         keyboardType="numeric"
         value={amount}
-        onChangeText={handleAmountChange} // Função para validar o valor numérico
+        onChangeText={handleAmountChange}
       />
 
       <Text style={styles.label}>Data</Text>

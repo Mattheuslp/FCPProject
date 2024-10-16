@@ -2,16 +2,15 @@ import React, { useState } from 'react';
 import { View, Text, TextInput, Button } from 'react-native';
 import { RouteProp } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
-import { addTransaction } from '../database/database'; // Função para salvar no banco de dados
-import styles from '../styles/AddTransactionStyles'; // Estilo geral para a tela
+import DateTimePicker from '@react-native-community/datetimepicker'; 
+import { addTransaction } from '../database/database';
+import styles from '../styles/AddTransactionStyles';
 
-// Definir os tipos de navegação e parâmetros
 type RootStackParamList = {
   Home: undefined;
   AddTransaction: { type: 'despesa' | 'receita'; addTransaction: (newTransaction: { id: string; type: string; name: string; amount: number; date: string }) => void };
 };
 
-// Definir o tipo do route
 type AddTransactionScreenRouteProp = RouteProp<RootStackParamList, 'AddTransaction'>;
 
 type AddTransactionScreenProps = {
@@ -20,29 +19,28 @@ type AddTransactionScreenProps = {
 };
 
 export default function AddTransactionScreen({ navigation, route }: AddTransactionScreenProps) {
-  const { type, addTransaction } = route.params; // Recebe o tipo de transação e a função de callback
+  const { type, addTransaction } = route.params;
   const [description, setDescription] = useState('');
   const [amount, setAmount] = useState('');
   const [date, setDate] = useState(new Date());
   const [showDatePicker, setShowDatePicker] = useState(false);
 
-  const onChangeDate = (event, selectedDate) => {
+  const onChangeDate = (event: any, selectedDate: any) => {
     const currentDate = selectedDate || date;
     setShowDatePicker(false);
     setDate(currentDate);
   };
 
-  // Função para validar o valor numérico com 2 casas decimais
-  const handleAmountChange = (text) => {
-    const numericValue = text.replace(/[^0-9.,]/g, '').replace(',', '.'); // Remove caracteres inválidos
+  const handleAmountChange = (text: string) => {
+    console.log("oi")
+    const numericValue = text.replace(/[^0-9.,]/g, '').replace(',', '.');
     if (numericValue && !isNaN(parseFloat(numericValue))) {
-      setAmount(parseFloat(numericValue).toFixed(2)); // Aplica toFixed apenas em valores válidos
+      setAmount(parseFloat(numericValue).toFixed(2));
     } else {
-      setAmount(numericValue); // Permite digitação parcial, como "1." ou "1.2"
+      setAmount(numericValue);
     }
   };
 
-  // Função para salvar a transação no banco de dados
   const saveTransaction = () => {
     if (description.length > 100) {
       alert('A descrição deve ter no máximo 100 caracteres');
@@ -55,17 +53,15 @@ export default function AddTransactionScreen({ navigation, route }: AddTransacti
     }
 
     const newTransaction = {
-      id: Date.now().toString(), // Gera um ID simples com base no timestamp atual
-      type, // Define se é 'despesa' ou 'receita'
+      id: Date.now().toString(),
+      type,
       name: description,
       amount: parseFloat(amount),
       date: date.toISOString(),
     };
 
-    // Salva a transação no banco de dados
     addTransaction(newTransaction);
 
-    // Retorna para a tela anterior
     navigation.goBack();
   };
 
@@ -87,8 +83,7 @@ export default function AddTransactionScreen({ navigation, route }: AddTransacti
         style={styles.input}
         placeholder="Digite o valor (ex: 123.45)"
         keyboardType="numeric"
-        value={amount}
-        onChangeText={handleAmountChange} // Função para validar o valor numérico
+        onChangeText={handleAmountChange}
       />
 
       <Text style={styles.label}>Data</Text>

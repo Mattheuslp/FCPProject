@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, Text, TouchableOpacity } from 'react-native';
-import styles from '../styles/MonthNavigatorStyles';  // Importando os estilos
+import styles from '../styles/MonthNavigatorStyles';
 
 interface MonthNavigatorProps {
   selectedMonth: string;

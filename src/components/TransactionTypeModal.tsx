@@ -12,7 +12,7 @@ export default function TransactionTypeModal({ visible, onClose, onSelect }: Tra
   return (
     <Modal
       transparent={true}
-      visible={visible}
+      visible={visible ?? false}
       animationType="fade"
     >
       <Pressable style={styles.overlay} onPress={onClose}>

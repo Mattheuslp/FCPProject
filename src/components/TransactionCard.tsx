@@ -1,9 +1,9 @@
 import React from 'react';
 import { View, Text } from 'react-native';
-import styles from '../styles/TransactionCardStyles';  // Importando os estilos
+import styles from '../styles/TransactionCardStyles';
 
 interface TransactionCardProps {
-  type: string;  // Defini tipos específicos para o tipo de transação
+  type: string;
   name: string;
   amount: number;
   date: string;
@@ -19,7 +19,11 @@ const TransactionCard: React.FC<TransactionCardProps> = ({ type, name, amount, d
       </Text>
       <View>
         <Text style={styles.name}>{name}</Text>
-        <Text style={styles.amount}>R$ {amount.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</Text>
+        <Text style={styles.amount}>
+          R$ {amount !== null && amount !== undefined 
+            ? amount.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) 
+            : '0,00'}
+        </Text>
         <Text style={styles.date}>{date}</Text>
       </View>
     </View>

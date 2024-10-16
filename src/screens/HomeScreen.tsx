@@ -1,14 +1,14 @@
 import React, { useState, useEffect } from 'react';
-import { View, FlatList, Pressable, Text, ScrollView } from 'react-native';
+import { View, FlatList, Pressable, Text } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import MonthNavigator from '../components/MonthNavigator';
 import BalanceSummary from '../components/BalanceSummary';
 import MonthlySummary from '../components/MonthlySummary';
 import TransactionCard from '../components/TransactionCard';
 import TipCard from '../components/TipCard';
-import TransactionTypeModal from '../components/TransactionTypeModal';  // Import the modal
+import TransactionTypeModal from '../components/TransactionTypeModal';
 import styles from '../styles/HomeScreenStyles';
-import { getTransactions } from '../database/database'; // Função para buscar transações do banco de dados
+import { getTransactions } from '../database/database';
 
 interface Transaction {
   id: string;
@@ -22,9 +22,8 @@ export default function HomeScreen() {
   const navigation = useNavigation();
   const [selectedMonth, setSelectedMonth] = useState('Outubro');
   const [transactions, setTransactions] = useState<Transaction[]>([]);
-  const [isModalVisible, setModalVisible] = useState(false); // State to control modal visibility
+  const [isModalVisible, setModalVisible] = useState(false);
 
-  // Obter transações do banco de dados quando a tela for carregada
   useEffect(() => {
     getTransactions(setTransactions);
   }, []);
@@ -47,48 +46,55 @@ export default function HomeScreen() {
   };
 
   return (
-    <ScrollView contentContainerStyle={styles.scrollContainer}>  {/* Envolve tudo em ScrollView */}
-      <View style={styles.headerContainer}>
-        <Text style={styles.appTitle}>FCP - Fluxo Contábil Pessoal</Text> {/* Garantindo que o texto esteja dentro de <Text> */}
-      </View>
-
-      <MonthNavigator selectedMonth={selectedMonth} onSelectMonth={setSelectedMonth} />
-
-      <BalanceSummary balance={totalIncome - totalExpenses} />
-
-      <TipCard tip="Você está no caminho certo, revise seus gastos em busca de oportunidades de corte." />
-
-      <MonthlySummary totalIncome={totalIncome} totalExpenses={totalExpenses} />
-
-      <FlatList
-        data={transactions}
-        keyExtractor={(item) => item.id}
-        renderItem={({ item }) => (
-          <TransactionCard
-            type={item.type}
-            name={item.name}
-            amount={item.amount}
-            date={item.date}
-          />
-        )}
-      />
-
-      {!isModalVisible && (
-        <Pressable
-          style={styles.addButton}
-          onPress={() => setModalVisible(true)}
-        >
-          <Text style={styles.addButtonText}>+</Text>
-        </Pressable>
-      )}
-
-      {isModalVisible && (
-        <TransactionTypeModal
-          visible={isModalVisible}
-          onClose={() => setModalVisible(false)}
-          onSelect={handleSelectTransactionType}
+    <FlatList
+      data={transactions}
+      keyExtractor={(item) => item.id}
+      renderItem={({ item }) => (
+        <TransactionCard
+          type={item.type}
+          name={item.name}
+          amount={item.amount}
+          date={item.date}
         />
       )}
-    </ScrollView>
+      ListHeaderComponent={() => (
+        <View>
+          <View style={styles.headerContainer}>
+            <Text style={styles.appTitle}>FCP - Fluxo Contábil Pessoal</Text>
+          </View>
+
+          <MonthNavigator
+            selectedMonth={selectedMonth}
+            onSelectMonth={setSelectedMonth}
+          />
+
+          <BalanceSummary balance={totalIncome - totalExpenses} />
+
+          <TipCard tip="Você está no caminho certo, revise seus gastos em busca de oportunidades de corte." />
+
+          <MonthlySummary
+            totalIncome={totalIncome}
+            totalExpenses={totalExpenses}
+          />
+
+          {!isModalVisible && (
+            <Pressable
+              style={styles.addButton}
+              onPress={() => setModalVisible(true)}
+            >
+              <Text style={styles.addButtonText}>+</Text>
+            </Pressable>
+          )}
+
+          {isModalVisible && (
+            <TransactionTypeModal
+              visible={isModalVisible}
+              onClose={() => setModalVisible(false)}
+              onSelect={handleSelectTransactionType}
+            />
+          )}
+        </View>
+      )}
+    />
   );
 }

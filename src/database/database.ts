@@ -8,7 +8,6 @@ if (db) {
   console.error('Erro ao abrir o banco de dados.');
 }
 
-// Função para criar a tabela de transações
 export const createTable = () => {
   try {
     console.log('Tentando criar a tabela...');
@@ -21,10 +20,8 @@ export const createTable = () => {
   }
 };
 
-// Função para adicionar uma nova transação
 export const addTransaction = (type: string, name: string, amount: number, date: string) => {
   try {
-    // Interpolando os valores diretamente na query
     db.execSync(
       `INSERT INTO transactions (type, name, amount, date) VALUES ('${type}', '${name}', ${amount}, '${date}');`
     );
@@ -34,7 +31,6 @@ export const addTransaction = (type: string, name: string, amount: number, date:
   }
 };
 
-// Função para obter as transações do banco de dados
 export const getTransactions = (
   setTransactions: (transactions: Array<{ id: string; type: string; name: string; amount: number; date: string }>) => void
 ) => {
@@ -43,7 +39,7 @@ export const getTransactions = (
       'SELECT * FROM transactions;'
     );
     
-    const rows = result?.rows?._array || []; // Converte o resultado para um array
+    const rows = result?.rows?._array || [];
     setTransactions(rows);
   } catch (error) {
     console.error('Erro ao obter transações', error);
